@@ -232,7 +232,7 @@ export default function SlotPicker({ value, onChange, initialDuration = 60, excl
                 {cur && cur.col === i && <div className="cal-current" style={{ top: cur.top, height: cur.height }} />}
                 {sel && sel.col === i && (
                   <div className="cal-sel" style={{ top: sel.top, height: sel.height }}>
-                    {fmtTime(sel.minutes).replace(' ', ' ')}
+                    {fmtTime(sel.minutes).replace(/ (am|pm)$/, '')}
                   </div>
                 )}
               </div>
