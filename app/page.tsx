@@ -116,7 +116,9 @@ function ScheduleSection() {
             <label className="field">
               <span>Choose a 4-digit PIN</span>
               <input
+                type="password"
                 inputMode="numeric"
+                autoComplete="off"
                 value={pin}
                 onChange={(e) => setPin(onlyDigits(e.target.value))}
                 placeholder="••••"
@@ -181,7 +183,9 @@ function CheckSection() {
             <label className="field">
               <span>PIN</span>
               <input
+                type="password"
                 inputMode="numeric"
+                autoComplete="off"
                 value={pin}
                 onChange={(e) => setPin(onlyDigits(e.target.value))}
                 placeholder="••••"
