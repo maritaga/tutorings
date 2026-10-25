@@ -469,3 +469,140 @@ select:focus {
     font-size: 15px;
   }
 }
+
+/* ───── Week calendar ───── */
+.cal {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: opacity 0.2s;
+}
+.cal.loading {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.cal-head,
+.cal-body {
+  display: grid;
+  grid-template-columns: 34px repeat(7, minmax(0, 1fr));
+}
+.cal-head {
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+.cal-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 0;
+  gap: 1px;
+}
+.cal-day small {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+.cal-day b {
+  font-weight: 500;
+  font-size: 14px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  border-radius: 50%;
+}
+.cal-day.today b {
+  background: var(--pink);
+  color: #fff;
+}
+.cal-day.past {
+  color: #c4c4c4;
+}
+.cal-times div {
+  font-size: 9px;
+  color: var(--muted);
+  text-align: right;
+  padding-right: 5px;
+  line-height: 1;
+  transform: translateY(-4px);
+  white-space: nowrap;
+}
+.cal-col {
+  position: relative;
+  border-left: 1px solid var(--line);
+}
+.cal-cell {
+  display: block;
+  width: 100%;
+  border: none;
+  border-top: 1px dashed #f3f3f3;
+  background: #fff;
+  padding: 0;
+  cursor: pointer;
+}
+.cal-cell.hour {
+  border-top: 1px solid #ededed;
+}
+.cal-cell:hover {
+  background: var(--pink-soft);
+}
+.cal-cell.grey {
+  background: #e9e9e9;
+  border-top-color: #e9e9e9;
+  cursor: not-allowed;
+}
+.cal-cell.grey.hour {
+  border-top-color: #e2e2e2;
+}
+.cal-sel,
+.cal-current {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border-radius: 6px;
+  pointer-events: none;
+}
+.cal-sel {
+  background: var(--pink);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 500;
+  padding: 3px 2px;
+  text-align: center;
+  line-height: 1.2;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(240, 108, 169, 0.35);
+}
+.cal-current {
+  border: 2px dashed var(--pink);
+  background: rgba(240, 108, 169, 0.08);
+}
+.cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.cal-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.sw {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.sw.grey {
+  background: #e9e9e9;
+}
+.sw.pink {
+  background: var(--pink);
+}
+.sw.current {
+  border: 2px dashed var(--pink);
+}

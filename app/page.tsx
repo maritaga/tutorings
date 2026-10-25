@@ -309,9 +309,16 @@ function BookingItem({
       {mode === 'change' && (
         <div className="sub">
           <p className="hint" style={{ marginTop: 0, marginBottom: 14 }}>
-            Pick a new day, time or length. Greyed-out times aren't available.
+            Pick a new day, time or length. The dashed box is your current time.
           </p>
-          <SlotPicker value={slot} onChange={setSlot} initialDuration={duration} excludeBookingId={b.id} refreshKey={refresh} />
+          <SlotPicker
+            value={slot}
+            onChange={setSlot}
+            initialDuration={duration}
+            excludeBookingId={b.id}
+            current={{ start: b.start, end: b.end }}
+            refreshKey={refresh}
+          />
           {error && <div className="msg error">{error}</div>}
           <button className="btn" disabled={busy || !slot} onClick={() => send('reschedule')}>
             {busy ? 'Sending…' : 'Send change request'}
