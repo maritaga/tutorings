@@ -14,7 +14,7 @@ export default function Privacy() {
       <p>When you book, we save your name, email, a 4-digit PIN (stored encrypted) and the date and time of your tutoring.</p>
       <h2 className="title">How we use it</h2>
       <p>
-        Only to manage your tutorings: to show you your bookings, handle change requests and send you a Google Calendar invite.
+        Only to manage your tutorings: to show you your bookings, handle changes and cancellations and send you a Google Calendar invite.
         We don't sell or share your information, and we don't use it for advertising.
       </p>
       <h2 className="title">Google Calendar</h2>

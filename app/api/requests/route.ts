@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { checkSlot } from '@/lib/availability';
-import { db } from '@/lib/db';
+import { cancelBooking, moveBooking } from '@/lib/bookings';
 import { findStudentBookings } from '@/lib/student';
 
 // POST /api/requests  { name, pin, bookingId, type: 'reschedule' | 'cancel', start?, duration? }
-// Saves a request for Marita to approve. Reschedules are checked against blocked times first.
+// Changes or cancels a tutoring right away. New times are checked against blocked times first.
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
@@ -16,37 +16,23 @@ export async function POST(req: NextRequest) {
     if (booking.status !== 'confirmed') return bad('This tutoring is already cancelled.');
     if (Date.parse(booking.start_at) <= Date.now()) return bad('This tutoring already started, so it can’t be changed.');
 
-    let newStart: string | null = null;
-    let newEnd: string | null = null;
-
-    if (body.type === 'reschedule') {
-      const start = Number(body.start);
-      const duration = Number(body.duration);
-      const end = start + duration * 60_000;
-      if (start === Date.parse(booking.start_at) && end === Date.parse(booking.end_at)) {
-        return bad('That’s the same time you already have.');
-      }
-      const problem = await checkSlot(start, duration, booking.id);
-      if (problem) return bad(problem, 409);
-      newStart = new Date(start).toISOString();
-      newEnd = new Date(end).toISOString();
-    } else if (body.type !== 'cancel') {
-      return bad('Unknown request.');
+    if (body.type === 'cancel') {
+      await cancelBooking(booking);
+      return NextResponse.json({ ok: true });
     }
+    if (body.type !== 'reschedule') return bad('Unknown request.');
 
-    // Only one open request per tutoring: a new one replaces the old one
-    const { error: e1 } = await db()
-      .from('change_requests')
-      .update({ status: 'replaced' })
-      .eq('booking_id', booking.id)
-      .eq('status', 'pending');
-    if (e1) throw e1;
-    const { error: e2 } = await db()
-      .from('change_requests')
-      .insert({ booking_id: booking.id, type: body.type, new_start: newStart, new_end: newEnd });
-    if (e2) throw e2;
-
-    return NextResponse.json({ ok: true });
+    const start = Number(body.start);
+    const duration = Number(body.duration);
+    const end = start + duration * 60_000;
+    if (start === Date.parse(booking.start_at) && end === Date.parse(booking.end_at)) {
+      return bad('That’s the same time you already have.');
+    }
+    const problem = await checkSlot(start, duration, booking.id);
+    if (problem) return bad(problem, 409);
+    const taken = await moveBooking(booking, start, end);
+    if (taken) return bad(taken, 409);
+    return NextResponse.json({ ok: true, start, end });
   } catch (e) {
     console.error(e);
     return bad('Something went wrong. Please try again.', 500);

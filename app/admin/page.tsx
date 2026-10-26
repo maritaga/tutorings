@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   DAY_LONG,
   DAY_SHORT,
-  fmtDuration,
   fmtRange,
   fmtTime,
   Hours,
@@ -16,7 +15,6 @@ import {
 type AdminBooking = { id: string; name: string; email: string; start: number; end: number; inCalendar: boolean };
 type Data = {
   google: { configured: boolean; connected: boolean };
-  requests: { id: string; type: 'reschedule' | 'cancel'; newStart: number | null; newEnd: number | null; booking: AdminBooking }[];
   bookings: AdminBooking[];
   blocks: { id: string; label: string; start: number; end: number }[];
   weekly: { id: string; weekday: number; start_min: number; end_min: number; label: string }[];
@@ -104,7 +102,6 @@ export default function AdminPage() {
       )}
 
       <GoogleSection google={data.google} run={run} />
-      <RequestsSection data={data} run={run} />
       <BookingsSection data={data} run={run} />
       <BlocksSection data={data} run={run} />
       <WeeklySection data={data} run={run} />
@@ -178,50 +175,6 @@ function GoogleSection({ google, run }: { google: Data['google']; run: Run }) {
               Connect Google Calendar
             </a>
           </>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function RequestsSection({ data, run }: { data: Data; run: Run }) {
-  return (
-    <section>
-      <h2 className="title">Change requests {data.requests.length > 0 && <span className="badge pink">{data.requests.length}</span>}</h2>
-      <div className="card">
-        {data.requests.length === 0 ? (
-          <p className="empty">No requests right now.</p>
-        ) : (
-          <div className="list">
-            {data.requests.map((r) => (
-              <div className="item" key={r.id}>
-                <div className="item-head">
-                  <div>
-                    <div className="item-title">{r.booking.name}</div>
-                    <div className="item-sub">{r.booking.email}</div>
-                  </div>
-                  <span className={`badge ${r.type === 'cancel' ? '' : 'pink'}`}>{r.type === 'cancel' ? 'Cancel' : 'Change'}</span>
-                </div>
-                <div className="note">
-                  Now: {fmtRange(r.booking.start, r.booking.end)}
-                  {r.type === 'reschedule' && (
-                    <>
-                      <br />
-                      <b style={{ fontWeight: 500 }}>Wants:</b> {fmtRange(r.newStart!, r.newEnd!)} ({fmtDuration((r.newEnd! - r.newStart!) / 60_000)})
-                    </>
-                  )}
-                </div>
-                <div className="actions">
-                  <button className="btn small" onClick={() => run({ action: 'approve', id: r.id }, 'Request approved.')}>
-                    Approve
-                  </button>
-                  <button className="btn small ghost" onClick={() => run({ action: 'reject', id: r.id }, 'Request rejected.')}>
-                    Reject
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
         )}
       </div>
     </section>

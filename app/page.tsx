@@ -80,7 +80,7 @@ function ScheduleSection() {
           </div>
           <div className="summary">{fmtRange(done.start, done.end, true)}</div>
           <p className="hint">
-            A calendar invite is on its way to your email. To check or change this tutoring, use your name and PIN below.
+            A calendar invite is on its way to your email. To check, change or cancel this tutoring, use your name and PIN below.
           </p>
           <button className="btn ghost" onClick={() => setDone(null)}>
             Book another tutoring
@@ -127,7 +127,7 @@ function ScheduleSection() {
                 maxLength={4}
               />
             </label>
-            <p className="hint">You'll use your name and PIN to check or change your tutorings.</p>
+            <p className="hint">You'll use your name and PIN to check, change or cancel your tutorings.</p>
             {error && <div className="msg error">{error}</div>}
             <button className="btn" disabled={busy}>
               {busy ? 'Booking…' : 'Book tutoring'}
@@ -240,13 +240,11 @@ function BookingItem({
   const [slot, setSlot] = useState<Selection>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  const [sent, setSent] = useState('');
+  const [done, setDone] = useState('');
   const [refresh, setRefresh] = useState(0);
 
   const duration = (b.end - b.start) / 60_000;
-  const pending = b.request?.status === 'pending' ? b.request : null;
-  const rejected = b.request?.status === 'rejected' ? b.request : null;
-  const canRequest = b.status === 'confirmed' && b.start > Date.now();
+  const canChange = b.status === 'confirmed' && b.start > Date.now();
 
   const send = async (type: 'reschedule' | 'cancel') => {
     if (type === 'reschedule' && !slot) return setError('Please choose a new day and time.');
@@ -254,7 +252,7 @@ function BookingItem({
     setError('');
     try {
       await post('/api/requests', { ...who, bookingId: b.id, type, ...(type === 'reschedule' ? slot : {}) });
-      setSent(type === 'cancel' ? 'Cancellation requested.' : 'Change requested.');
+      setDone(type === 'cancel' ? 'Your tutoring was cancelled.' : 'Done! Your tutoring was changed. Your calendar invite was updated too.');
       setMode('none');
       setSlot(null);
       await onChanged();
@@ -273,35 +271,18 @@ function BookingItem({
           <div className="item-title">{fmtRange(b.start, b.end)}</div>
           <div className="item-sub">{fmtDuration(duration)}</div>
         </div>
-        {b.status === 'cancelled' ? (
-          <span className="badge">Cancelled</span>
-        ) : pending ? (
-          <span className="badge pink">Request pending</span>
-        ) : (
-          <span className="badge green">Confirmed</span>
-        )}
+        {b.status === 'cancelled' ? <span className="badge">Cancelled</span> : <span className="badge green">Confirmed</span>}
       </div>
 
-      {pending && (
-        <div className="note pink">
-          {pending.type === 'cancel'
-            ? 'You asked to cancel this tutoring.'
-            : `You asked to move it to ${fmtRange(pending.newStart!, pending.newEnd!)}.`}{' '}
-          Waiting for Marita's approval.
-        </div>
-      )}
-      {rejected && !pending && b.status === 'confirmed' && (
-        <div className="note">Your last request wasn't approved, so this tutoring stays as it is.</div>
-      )}
-      {sent && !error && <div className="msg ok">{sent} Marita will review it soon.</div>}
+      {done && !error && <div className="msg ok">{done}</div>}
 
-      {canRequest && mode === 'none' && (
+      {canChange && mode === 'none' && (
         <div className="actions">
-          <button className="link" onClick={() => { setMode('change'); setSent(''); setError(''); }}>
-            {pending ? 'Request a different change' : 'Request change'}
+          <button className="link" onClick={() => { setMode('change'); setDone(''); setError(''); }}>
+            Change
           </button>
-          <button className="link danger" onClick={() => { setMode('cancel'); setSent(''); setError(''); }}>
-            Request cancellation
+          <button className="link danger" onClick={() => { setMode('cancel'); setDone(''); setError(''); }}>
+            Cancel tutoring
           </button>
         </div>
       )}
@@ -321,7 +302,7 @@ function BookingItem({
           />
           {error && <div className="msg error">{error}</div>}
           <button className="btn" disabled={busy || !slot} onClick={() => send('reschedule')}>
-            {busy ? 'Sending…' : 'Send change request'}
+            {busy ? 'Saving…' : 'Save change'}
           </button>
           <button className="btn ghost" onClick={() => { setMode('none'); setSlot(null); setError(''); }}>
             Never mind
@@ -331,14 +312,14 @@ function BookingItem({
 
       {mode === 'cancel' && (
         <div className="sub">
-          <p className="hint" style={{ marginTop: 0 }}>Ask Marita to cancel this tutoring?</p>
+          <p className="hint" style={{ marginTop: 0 }}>Cancel this tutoring?</p>
           {error && <div className="msg error">{error}</div>}
           <div className="row">
             <button className="btn ghost" onClick={() => { setMode('none'); setError(''); }}>
               Keep it
             </button>
             <button className="btn" disabled={busy} onClick={() => send('cancel')}>
-              {busy ? 'Sending…' : 'Yes, request'}
+              {busy ? 'Cancelling…' : 'Yes, cancel'}
             </button>
           </div>
         </div>

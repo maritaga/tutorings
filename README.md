@@ -3,9 +3,9 @@
 A minimal app for students to book tutorings with Marita.
 
 - **Students** (`/`) pick a day, a length (1 h to 3.5 h) and a start time. They only see times that fit around classes, blocked times, other tutorings and Google Calendar. They register with their name, email and a 4-digit PIN.
-- **Check my tutorings**: students type their name and PIN to see their tutorings and request a change or a cancellation. If the new time is blocked, the app tells them right away.
-- **Admin** (`/admin`, password protected): approve or reject requests, cancel tutorings, block one-off times, edit weekly blocked times and tutoring hours, and connect Google Calendar.
-- **Google Calendar**: your busy events block times, and every tutoring is added to your calendar with the student invited by email. Approved changes and cancellations update the event.
+- **Check my tutorings**: students type their name and PIN to see their tutorings and change or cancel them right away, no approval needed. If the new time is blocked, the app tells them.
+- **Admin** (`/admin`, password protected): see and cancel tutorings, block one-off times, edit weekly blocked times and tutoring hours, and connect Google Calendar.
+- **Google Calendar**: your busy events block times, and every tutoring is added to your calendar with the student invited by email. Changes and cancellations update the event automatically.
 
 All times are Mexico City time.
 

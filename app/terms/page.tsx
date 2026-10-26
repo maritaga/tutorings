@@ -13,9 +13,9 @@ export default function Terms() {
       <h2 className="title">Bookings</h2>
       <p>Tutorings last from 1 to 3.5 hours and are confirmed when you book an available time.</p>
       <h2 className="title">Changes and cancellations</h2>
-      <p>You can request a change or a cancellation from &ldquo;Check my tutorings&rdquo;. Requests need Marita&apos;s approval.</p>
+      <p>You can change or cancel a tutoring from &ldquo;Check my tutorings&rdquo; before it starts. New times must be available.</p>
       <h2 className="title">Your PIN</h2>
-      <p>Keep your PIN private. Anyone with your name and PIN can see and request changes to your tutorings.</p>
+      <p>Keep your PIN private. Anyone with your name and PIN can see, change and cancel your tutorings.</p>
       <p>
         <Link href="/" className="link">← Back to tutorings</Link>
       </p>
