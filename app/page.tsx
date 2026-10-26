@@ -100,7 +100,7 @@ function ScheduleSection() {
           <form onSubmit={submit} className="sub">
             <label className="field">
               <span>Name</span>
-              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name" autoComplete="name" required />
+              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" autoComplete="name" required />
             </label>
             <label className="field">
               <span>Email</span>
@@ -127,7 +127,7 @@ function ScheduleSection() {
                 maxLength={4}
               />
             </label>
-            <p className="hint">You'll use your name and PIN to check, change or cancel your tutorings.</p>
+            <p className="hint">Use the same name and PIN every time you book, so all your tutorings show up together.</p>
             {error && <div className="msg error">{error}</div>}
             <button className="btn" disabled={busy}>
               {busy ? 'Booking…' : 'Book tutoring'}
@@ -178,7 +178,7 @@ function CheckSection() {
           <form onSubmit={submit}>
             <label className="field" style={{ marginTop: 0 }}>
               <span>Name</span>
-              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name" required />
+              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" required />
             </label>
             <label className="field">
               <span>PIN</span>
@@ -194,6 +194,7 @@ function CheckSection() {
                 maxLength={4}
               />
             </label>
+            <p className="hint">Use the same name and PIN you used when booking.</p>
             {error && <div className="msg error">{error}</div>}
             <button className="btn" disabled={busy}>
               {busy ? 'Checking…' : 'Check'}
