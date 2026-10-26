@@ -322,14 +322,13 @@ function WeeklySection({ data, run }: { data: Data; run: Run }) {
   const [weekday, setWeekday] = useState(1);
   const [from, setFrom] = useState('07:00');
   const [to, setTo] = useState('09:00');
-  const [label, setLabel] = useState('');
 
   return (
     <section>
-      <h2 className="title">Weekly classes</h2>
+      <h2 className="title">Weekly blocked times</h2>
       <div className="card">
         {data.weekly.length === 0 ? (
-          <p className="empty">No weekly blocks.</p>
+          <p className="empty">No weekly blocked times.</p>
         ) : (
           <div className="table">
             {data.weekly.map((w) => (
@@ -338,7 +337,6 @@ function WeeklySection({ data, run }: { data: Data; run: Run }) {
                   <div className="item-title">
                     {DAY_SHORT[w.weekday]} · {fmtTime(w.start_min)} – {fmtTime(w.end_min)}
                   </div>
-                  {w.label && <div className="item-sub">{w.label}</div>}
                 </div>
                 <button className="link danger" onClick={() => run({ action: 'deleteWeekly', id: w.id }, 'Removed.')}>
                   Remove
@@ -351,8 +349,7 @@ function WeeklySection({ data, run }: { data: Data; run: Run }) {
           className="sub form-grid"
           onSubmit={async (e) => {
             e.preventDefault();
-            const ok = await run({ action: 'addWeekly', weekday, from: hhmmToMin(from), to: hhmmToMin(to), label }, 'Weekly block added.');
-            if (ok) setLabel('');
+            await run({ action: 'addWeekly', weekday, from: hhmmToMin(from), to: hhmmToMin(to) }, 'Weekly block added.');
           }}
         >
           <label className="field full">
@@ -372,10 +369,6 @@ function WeeklySection({ data, run }: { data: Data; run: Run }) {
           <label className="field">
             <span>To</span>
             <input type="time" step={1800} value={to} onChange={(e) => setTo(e.target.value)} required />
-          </label>
-          <label className="field full">
-            <span>Class (optional)</span>
-            <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Class name" />
           </label>
           <button className="btn full">Add weekly block</button>
         </form>

@@ -42,7 +42,7 @@ create table if not exists blocks (
   label text not null default ''
 );
 
--- Blocks that repeat every week (classes). weekday: 0 = Sunday … 6 = Saturday.
+-- Blocked times that repeat every week. weekday: 0 = Sunday … 6 = Saturday.
 -- Times are minutes after midnight, Mexico City time.
 create table if not exists weekly_blocks (
   id uuid primary key default gen_random_uuid(),
@@ -88,18 +88,18 @@ insert into settings (key, value) values ('hours', '[
   {"open": 660, "lastStart": 1260}
 ]') on conflict (key) do nothing;
 
--- Weekly classes
+-- Weekly blocked times (classes)
 insert into weekly_blocks (weekday, start_min, end_min, label)
 select * from (values
-  (1, 420, 540, 'Análisis de circuitos eléctricos'),
-  (1, 660, 900, 'Diseño y análisis de experimentos'),
-  (1, 900, 990, 'Argumentación, debate y el arte de la persuasión'),
-  (4, 420, 540, 'Análisis de circuitos eléctricos'),
-  (4, 660, 900, 'Diseño y análisis de experimentos'),
-  (4, 900, 990, 'Argumentación, debate y el arte de la persuasión'),
-  (2, 540, 660, 'Modelación en ingeniería mediante sistemas dinámicos'),
-  (2, 780, 900, 'Diseño y análisis de experimentos'),
-  (5, 540, 660, 'Modelación en ingeniería mediante sistemas dinámicos'),
-  (5, 780, 900, 'Diseño y análisis de experimentos')
+  (1, 420, 540, ''),
+  (1, 660, 900, ''),
+  (1, 900, 990, ''),
+  (4, 420, 540, ''),
+  (4, 660, 900, ''),
+  (4, 900, 990, ''),
+  (2, 540, 660, ''),
+  (2, 780, 900, ''),
+  (5, 540, 660, ''),
+  (5, 780, 900, '')
 ) as v(weekday, start_min, end_min, label)
 where not exists (select 1 from weekly_blocks);

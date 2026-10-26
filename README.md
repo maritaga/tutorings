@@ -4,7 +4,7 @@ A minimal app for students to book tutorings with Marita.
 
 - **Students** (`/`) pick a day, a length (1 h to 3.5 h) and a start time. They only see times that fit around classes, blocked times, other tutorings and Google Calendar. They register with their name, email and a 4-digit PIN.
 - **Check my tutorings**: students type their name and PIN to see their tutorings and request a change or a cancellation. If the new time is blocked, the app tells them right away.
-- **Admin** (`/admin`, password protected): approve or reject requests, cancel tutorings, block one-off times, edit weekly classes and tutoring hours, and connect Google Calendar.
+- **Admin** (`/admin`, password protected): approve or reject requests, cancel tutorings, block one-off times, edit weekly blocked times and tutoring hours, and connect Google Calendar.
 - **Google Calendar**: your busy events block times, and every tutoring is added to your calendar with the student invited by email. Approved changes and cancellations update the event.
 
 All times are Mexico City time.
@@ -22,7 +22,7 @@ You'll create three free accounts: **Supabase** (database), **Vercel** (hosting)
 1. Go to [supabase.com](https://supabase.com), sign up and click **New project**.
    - Name: `tutorings`. Choose a database password (save it somewhere). Region: **East US** or the closest one to Mexico.
 2. When the project is ready, open **SQL Editor** in the left menu, then **New query**.
-3. Open the file [`supabase/schema.sql`](supabase/schema.sql) in this repo, copy everything, paste it in the editor and click **Run**. You should see "Success". This creates the tables and loads your classes and hours.
+3. Open the file [`supabase/schema.sql`](supabase/schema.sql) in this repo, copy everything, paste it in the editor and click **Run**. You should see "Success". This creates the tables and loads your weekly blocked times and hours.
 4. Go to **Project Settings → Data API** (or click **Connect** at the top) and copy the **Project URL**. That's your `SUPABASE_URL`.
 5. Go to **Project Settings → API Keys** and copy the **secret** key (starts with `sb_secret_`). That's your `SUPABASE_SECRET_KEY`. If you only see "legacy" keys, the **service_role** key works too.
 
@@ -95,7 +95,7 @@ From then on:
 
 ## Changing things later
 
-- **Classes and hours**: edit them on `/admin`. No code needed.
+- **Weekly blocked times and hours**: edit them on `/admin`. No code needed.
 - **Code changes**: every push to the `main` branch on GitHub redeploys automatically on Vercel.
 
 ## Running it on your computer (optional)
