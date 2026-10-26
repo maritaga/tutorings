@@ -606,3 +606,14 @@ select:focus {
 .sw.current {
   border: 2px dashed var(--pink);
 }
+
+/* ───── Privacy / terms ───── */
+.legal p {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+.legal .title {
+  margin-top: 28px;
+  margin-bottom: 8px;
+}
